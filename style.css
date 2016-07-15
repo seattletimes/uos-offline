@@ -1,0 +1,50 @@
+/* variables */
+html {
+  --uos-gray: #4A5E66;
+  --df-off-black: rgb(35, 31, 32);
+  --df-off-white: rgb(248, 248, 248);
+  --df-footer-gray: rgb(239, 239, 239);
+  --df-light-gray: rgb(224, 224, 224);
+  --df-border-gray: rgb(192, 192, 192);
+  --df-middle-gray: rgb(126, 131, 139);
+  --df-dark-gray: rgb(66, 70, 72);
+  --df-charcoal: rgb(34, 34, 34);
+}
+
+* { box-sizing: border-box }
+
+body {
+  margin: 0;
+  background: var(--uos-gray);
+  font-family: sans-serif;
+  color: white;
+}
+
+.videos {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.video-container {
+  flex: 0 0 33%;
+  padding: 16px;
+}
+
+.video-container .aspect {
+  position: relative;
+}
+
+.video-container .aspect::before {
+  padding-bottom: calc(9 / 16 * 100%);
+  display: block;
+  content: "";
+}
+
+.video-container video {
+  position: absolute;
+  background: black;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
