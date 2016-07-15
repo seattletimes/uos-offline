@@ -15,7 +15,7 @@ var videoTemplate = function(data) {
 var words = document.querySelector(".word.videos");
 
 for (var i = 0; i < 5; i++) {
-  words.innerHTML += videoTemplate({ source: "./small.mp4" });
+  words.innerHTML += videoTemplate({ source: "./videos/small.mp4" });
 }
 
 var $ = s => [].slice.call(document.querySelectorAll(s));
@@ -30,7 +30,6 @@ var onClick = function() {
 };
 
 var onStop = function() {
-  console.log("stop", this);
   this.removeAttribute("controls");
   this.currentTime = 0;
 }
