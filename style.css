@@ -20,7 +20,45 @@ body {
   color: white;
 }
 
+.nav {
+  background: #222;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 999;
+}
+.logo {
+  height: 35px;
+  margin: 10px 0 3px 15px;
+  padding: 5px;
+}
+.header {
+  letter-spacing: 0.06em;
+  font-weight: bold;
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.title {
+  cursor: pointer;
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 1.5em;
+  font-weight: 400;
+  color: #d9d9d9;
+  letter-spacing: 0.08em;
+  position: absolute;
+  z-index: 99;
+  left: 50%;
+  top: 50%;
+  margin: 0px;
+  transform: translateX(-50%) translateY(-50%);
+}
+
 .videos {
+  margin-top: 65px;
   display: flex;
   flex-wrap: wrap;
 }
@@ -28,10 +66,12 @@ body {
 .video-container {
   flex: 0 0 33%;
   padding: 16px;
+  position: relative;
 }
 
 .video-container .aspect {
   position: relative;
+  cursor: pointer;
 }
 
 .video-container .aspect::before {
