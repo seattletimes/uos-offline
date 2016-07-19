@@ -86,7 +86,7 @@ body {
   display: none;
 }
 
-.video-container video:fullscreen {
+.video-container.active video {
   display: block;
 }
 

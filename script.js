@@ -4,7 +4,7 @@ var wordTemplate = function(data) {
     <div class="title">${data.title || "..."}</div>
       <video class="video" preload="metadata" poster="">
         <source src="${data.video}"></source>
-        <track default kind="captions" label="CC" src="${data.caption}"></track>
+        <track default label="CC" src="${data.caption}"></track>
       </video>
   </div>
   `;
@@ -17,7 +17,7 @@ var bioTemplate = function(data) {
       <img src="${data.still}">
       <video class="video" preload="metadata" poster="">
         <source src="${data.video}"></source>
-        // <track default kind="captions" label="CC" src="${data.caption}"></track>
+        // <track default label="CC" src="${data.caption}"></track>
       </video>
 
     <h3 class="name">${data.name || "..."}</h3>
@@ -72,13 +72,13 @@ for (var title in words) {
 
 var bioContainer = document.querySelector(".bio.videos");
 
-for (var name in people) {
-  var person = people[name];
-  var video = "./videos/bios/" + person.video;
-  var caption = "";
-  var still = "./stills/" + person.still + ".jpg";
-  bioContainer.innerHTML += bioTemplate({ name, video, still });
-}
+// for (var name in people) {
+//   var person = people[name];
+//   var video = "./videos/bios/" + person.video;
+//   var caption = "";
+//   var still = "./stills/" + person.still + ".jpg";
+//   bioContainer.innerHTML += bioTemplate({ name, video, still });
+// }
 
 var $ = s => [].slice.call(document.querySelectorAll(s));
 var fullscreen = document.body.webkitRequestFullscreen ? "webkitRequestFullscreen" : "requestFullscreen";
@@ -87,7 +87,8 @@ var fullscreenElement = "webkitFullscreenElement" in document ? "webkitFullscree
 
 var playing = null;
 var onClick = function() {
-  var video = this.getElementsByClassName('video')[0];
+  this.classList.add("active");
+  var video = this.querySelector(".video");
   if (document[fullscreenElement] == video) return;
   video[fullscreen]();
   video.play();
@@ -97,6 +98,7 @@ var onClick = function() {
 
 var onExit = function() {
   if (document[fullscreenElement]) return;
+  $(".video-container.active").forEach(el => el.classList.remove("active"));
   playing.pause();
   playing.currentTime = 0;
   playing.removeAttribute("controls");
