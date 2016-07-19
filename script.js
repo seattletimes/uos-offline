@@ -3,7 +3,6 @@ var wordTemplate = function(data) {
   <div class="video-container">
     <div class="title">${data.title || "..."}</div>
       <video class="video" preload="metadata" poster="">
-      <div class="close">CLOSE</div>
         <source src="${data.video}"></source>
         <track default kind="captions" label="CC" src="${data.caption}"></track>
       </video>
