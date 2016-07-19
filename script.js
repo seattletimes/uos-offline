@@ -2,7 +2,7 @@ var wordTemplate = function(data) {
   return `
   <div class="video-container">
     <div class="title">${data.title || "..."}</div>
-      <video class="video" preload="metadata" poster="">
+      <video class="video" preload="none" poster="">
         <source src="${data.video}"></source>
         <track default label="CC" src="${data.caption}"></track>
       </video>
@@ -15,7 +15,7 @@ var bioTemplate = function(data) {
   <div class="video-container">
 
       <img src="${data.still}">
-      <video class="video" preload="metadata" poster="">
+      <video class="video" preload="none" poster="">
         <source src="${data.video}"></source>
         // <track default label="CC" src="${data.caption}"></track>
       </video>
@@ -72,13 +72,13 @@ for (var title in words) {
 
 var bioContainer = document.querySelector(".bio.videos");
 
-// for (var name in people) {
-//   var person = people[name];
-//   var video = "./videos/bios/" + person.video;
-//   var caption = "";
-//   var still = "./stills/" + person.still + ".jpg";
-//   bioContainer.innerHTML += bioTemplate({ name, video, still });
-// }
+for (var name in people) {
+  var person = people[name];
+  var video = "./videos/bios/" + person.video;
+  var caption = "";
+  var still = "./stills/" + person.still + ".jpg";
+  bioContainer.innerHTML += bioTemplate({ name, video, still });
+}
 
 var $ = s => [].slice.call(document.querySelectorAll(s));
 var fullscreen = document.body.webkitRequestFullscreen ? "webkitRequestFullscreen" : "requestFullscreen";
