@@ -81,9 +81,12 @@ for (var name in people) {
 }
 
 var $ = s => [].slice.call(document.querySelectorAll(s));
-var fullscreen = document.body.webkitRequestFullscreen ? "webkitRequestFullscreen" : "requestFullscreen";
-var exitFullscreen = document.webkitExitFullscreen ? "webkitExitFullscreen" : "exitFullscreen";
-var fullscreenElement = "webkitFullscreenElement" in document ? "webkitFullscreenElement" : "fullscreenElement";
+var fullscreen = document.body.webkitRequestFullscreen ? "webkitRequestFullscreen" : 
+  document.mozRequestFullScreen ? "mozRequestFullScreen": "requestFullscreen";
+var exitFullscreen = document.webkitExitFullscreen ? "webkitExitFullscreen" : 
+  document.mozCancelFullScreen ? "mozCancelFullScreen" : "exitFullscreen";
+var fullscreenElement = "webkitFullscreenElement" in document ? "webkitFullscreenElement" : 
+  "mozFullScreenElement" in document ? "mozFullScreenElement" : "fullscreenElement";
 
 var playing = null;
 var onClick = function() {
