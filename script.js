@@ -1,11 +1,49 @@
+var animating = false;
+
+var noop = function() {};
+var ease = v => 0.5 - Math.cos( v * Math.PI ) / 2;
+
+var getScroll = () => document.body.scrollTop || document.documentElement.scrollTop || 0;
+
+var animateScroll = function(element, done = noop) {
+  if (animating) return;
+  if (typeof element == "string") element = document.querySelector(element);
+
+  var start = getScroll();
+  var now = Date.now();
+  var duration = 800;
+
+  var frame = function() {
+    var t = Date.now();
+    var elapsed = t - now;
+    var d = elapsed / duration;
+    var bounds = element.getBoundingClientRect();
+    var offset = bounds.top + getScroll();
+    var distance = offset - start - 70;
+    document.body.scrollTop = document.documentElement.scrollTop = start + distance * ease(d);
+    if (elapsed > duration) {
+      setTimeout(() => document.body.scrollTop = document.documentElement.scrollTop = start + distance, 10);
+      return animating = false;
+    }
+    requestAnimationFrame(frame);
+  };
+
+  animating = true;
+  frame();
+};
+
+
 var wordTemplate = function(data) {
   return `
   <div class="video-container">
     <div class="title">${data.title || "..."}</div>
-      <video class="video" preload="none" poster="">
-        <source src="${data.video}"></source>
-        <track default label="CC" src="${data.caption}"></track>
-      </video>
+      <div class="fullscreen-container">
+        <div class="close">X</div>
+        <video class="video" preload="none" poster="">
+          <source src="${data.video}"></source>
+          <track default label="CC" src="${data.caption}"></track>
+        </video>
+      </div>
   </div>
   `;
 };
@@ -15,10 +53,13 @@ var bioTemplate = function(data) {
   <div class="video-container">
 
       <img src="${data.still}">
-      <video class="video" preload="none" poster="">
-        <source src="${data.video}"></source>
-        // <track default label="CC" src="${data.caption}"></track>
-      </video>
+      <div class="fullscreen-container">
+        <div class="close">X</div>
+          <video class="video" preload="none" poster="">
+          <source src="${data.video}"></source>
+          // <track default label="CC" src="${data.caption}"></track>
+        </video>
+      </div>
 
     <h3 class="name">${data.name || "..."}</h3>
   </div>
@@ -93,7 +134,7 @@ var onClick = function() {
   this.classList.add("active");
   var video = this.querySelector(".video");
   if (document[fullscreenElement] == video) return;
-  video[fullscreen]();
+  this.querySelector(".fullscreen-container")[fullscreen]();
   video.play();
   video.setAttribute("controls", "");
   playing = video;
@@ -112,6 +153,22 @@ var onExit = function() {
 $(".video-container").forEach(function(element) {
   element.addEventListener("click", onClick);
 });
+$("video").forEach(function(v) {
+  v.addEventListener("ended", function() {
+    document[exitFullscreen]();
+    onExit();
+  });
+})
+$(".close").forEach(function(e) {
+  e.addEventListener("click", function() {
+    document[exitFullscreen]();
+    onExit();
+  });
+})
+
+document.querySelector(".start").addEventListener("click", function() {
+  animateScroll("#project");
+})
 
 document.addEventListener("fullscreenchange", onExit);
 document.addEventListener("webkitfullscreenchange", onExit);
