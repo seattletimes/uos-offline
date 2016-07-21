@@ -57,7 +57,6 @@ var bioTemplate = function(data) {
         <div class="close">X</div>
           <video class="video" preload="none" poster="">
           <source src="${data.video}"></source>
-          // <track default label="CC" src="${data.caption}"></track>
         </video>
       </div>
 
@@ -123,7 +122,7 @@ for (var name in people) {
 
 var $ = s => [].slice.call(document.querySelectorAll(s));
 var fullscreen = document.body.webkitRequestFullscreen ? "webkitRequestFullscreen" : 
-  document.mozRequestFullScreen ? "mozRequestFullScreen": "requestFullscreen";
+  document.body.mozRequestFullScreen ? "mozRequestFullScreen": "requestFullscreen";
 var exitFullscreen = document.webkitExitFullscreen ? "webkitExitFullscreen" : 
   document.mozCancelFullScreen ? "mozCancelFullScreen" : "exitFullscreen";
 var fullscreenElement = "webkitFullscreenElement" in document ? "webkitFullscreenElement" : 
@@ -141,14 +140,20 @@ var onClick = function() {
 };
 
 var onExit = function() {
-  if (document[fullscreenElement]) return;
   $(".video-container.active").forEach(el => el.classList.remove("active"));
+  if (!playing) return;
+  console.log("exit");
   playing.pause();
   playing.currentTime = 0;
   playing.removeAttribute("controls");
   playing.currentTime = 0;
   playing = null;
 };
+
+var onFullscreenChange = function() {
+  if (document[fullscreenElement]) return;
+  onExit();
+}
 
 $(".video-container").forEach(function(element) {
   element.addEventListener("click", onClick);
@@ -159,16 +164,18 @@ $("video").forEach(function(v) {
     onExit();
   });
 })
-$(".close").forEach(function(e) {
-  e.addEventListener("click", function() {
+$(".close").forEach(function(element) {
+  element.addEventListener("click", function(e) {
     document[exitFullscreen]();
     onExit();
+    e.stopPropagation();
   });
 })
 
 document.querySelector(".start").addEventListener("click", function() {
   animateScroll("#project");
-})
+});
 
-document.addEventListener("fullscreenchange", onExit);
-document.addEventListener("webkitfullscreenchange", onExit);
+document.addEventListener("fullscreenchange", onFullscreenChange);
+document.addEventListener("mozfullscreenchange", onFullscreenChange);
+document.addEventListener("webkitfullscreenchange", onFullscreenChange);
