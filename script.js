@@ -1,7 +1,25 @@
-var animating = false;
-
+// helpers
+var $ = s => [].slice.call(document.querySelectorAll(s));
 var noop = function() {};
 var ease = v => 0.5 - Math.cos( v * Math.PI ) / 2;
+
+// global state
+var playing = null;
+var idle = null;
+var animating = false;
+
+// check for idle, scroll to the top after five minutes
+var idleExpired = function() {
+  if (playing) return resetIdle();
+  document.body.scrollTop = document.documentElement.scrollTop = 0;
+};
+
+var resetIdle = function() {
+  clearTimeout(idle);
+  idle = setTimeout(idleExpired, 1000 * 60 * 5); // five minute idle timeout
+};
+window.addEventListener("mousemove", resetIdle);
+window.addEventListener("scroll", resetIdle);
 
 var getScroll = () => document.body.scrollTop || document.documentElement.scrollTop || 0;
 
@@ -32,18 +50,18 @@ var animateScroll = function(element, done = noop) {
   frame();
 };
 
-
+// create the video containers
 var wordTemplate = function(data) {
   return `
   <div class="video-container">
     <div class="title">${data.title || "..."}</div>
-      <div class="fullscreen-container">
-        <div class="close">X</div>
-        <video class="video" preload="none" poster="">
-          <source src="${data.video}"></source>
-          <track default label="CC" src="${data.caption}"></track>
-        </video>
-      </div>
+    <div class="fullscreen-container">
+      <div class="close">X</div>
+      <video class="video" preload="none" poster="">
+        <source src="${data.video}"></source>
+        <track default label="CC" src="${data.caption}"></track>
+      </video>
+    </div>
   </div>
   `;
 };
@@ -51,15 +69,13 @@ var wordTemplate = function(data) {
 var bioTemplate = function(data) {
   return `
   <div class="video-container">
-
-      <img src="${data.still}">
-      <div class="fullscreen-container">
-        <div class="close">X</div>
-          <video class="video" preload="none" poster="">
-          <source src="${data.video}"></source>
-        </video>
-      </div>
-
+    <img src="${data.still}">
+    <div class="fullscreen-container">
+      <div class="close">X</div>
+        <video class="video" preload="none" poster="">
+        <source src="${data.video}"></source>
+      </video>
+    </div>
     <h3 class="name">${data.name || "..."}</h3>
   </div>
   `;
@@ -120,15 +136,10 @@ for (var name in people) {
   bioContainer.innerHTML += bioTemplate({ name, video, still });
 }
 
-var $ = s => [].slice.call(document.querySelectorAll(s));
-var fullscreen = document.body.webkitRequestFullscreen ? "webkitRequestFullscreen" : 
-  document.body.mozRequestFullScreen ? "mozRequestFullScreen": "requestFullscreen";
-var exitFullscreen = document.webkitExitFullscreen ? "webkitExitFullscreen" : 
-  document.mozCancelFullScreen ? "mozCancelFullScreen" : "exitFullscreen";
-var fullscreenElement = "webkitFullscreenElement" in document ? "webkitFullscreenElement" : 
-  "mozFullScreenElement" in document ? "mozFullScreenElement" : "fullscreenElement";
+var fullscreen = "requestFullscreen" in document.body ? "requestFullscreen" : "webkitRequestFullscreen";
+var exitFullscreen = "exitFullscreen" in document ? "exitFullscreen" : "webkitExitFullscreen";
+var fullscreenElement = "fullscreenElement" in document ? "fullscreenElement" : "webkitFullscreenElement";
 
-var playing = null;
 var onClick = function() {
   this.classList.add("active");
   var video = this.querySelector(".video");
@@ -142,7 +153,6 @@ var onClick = function() {
 var onExit = function() {
   $(".video-container.active").forEach(el => el.classList.remove("active"));
   if (!playing) return;
-  console.log("exit");
   playing.pause();
   playing.currentTime = 0;
   playing.removeAttribute("controls");

@@ -1,0 +1,16 @@
+INSTRUCTIONS
+================
+
+There are two .bat files in this folder. Double-clicking on "Under Our Skin.bat" should start the kiosk version of the presentation, which is a standalone version of the website. By default, it will start in windowed mode. You can open it fullscreen by running "Under Our Skin - fullscreen.bat" if you want, but note that there is no close button. The easiest way to exit the fullscreen version of the kiosk is to press Alt-F4 to quit.
+
+If you have difficulties running the offline site, you can open the videos directly, either by running the "Open video folder.bat" program or by navigating to the uos-kiosk/resources/app/videos folder (it's buried a little, which is why we added the shortcut). Your computer may not be able to run the videos by double-clicking on them, but if you drag-and-drop them into a browser window, they should load fine.
+
+I would strongly recommend copying the contents of the flash drive to your hard drive before attempting to play the videos. These are the full-sized video files, and they may skip a little if you try to play them off the USB stick. By copying them to your hard drive, you'll make sure that they're available via the fastest hardware on your computer, which should let them play skip-free.
+
+If you have any questions at all, please feel free to get in touch with me. My contact information is below. Thanks for your interest in Under Our Skin!
+
+Thomas Wilburn
+News Developer
+The Seattle Times
+twilburn@seattletimes.com
+(571) 242-2640
